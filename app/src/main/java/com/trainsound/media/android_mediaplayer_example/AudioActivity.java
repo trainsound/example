@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import java.io.IOException;
+
 public class AudioActivity extends AppCompatActivity
         implements  MediaPlayer.OnPreparedListener,
         MediaPlayer.OnErrorListener,
@@ -28,7 +30,18 @@ public class AudioActivity extends AppCompatActivity
         // Create a MediaPlayer instance and register this activity for events which are
         // of relevance for us: OnPrepared, OnCompletion and OnError.
         // (We'll release and nullify the MediaPlayer in the activity's onStop() method ).
-        mMediaPlayer = MediaPlayer.create(this, R.raw.park_boo);
+        if(Configs.default_audioplay_mode.equals("localfileplay")) {
+            mMediaPlayer = MediaPlayer.create(this, Configs.audio_local_file);
+        }else if(Configs.default_audioplay_mode.equals("network")){
+            mMediaPlayer = new MediaPlayer();
+            try {
+                mMediaPlayer.setDataSource(Configs.audio_url);
+                mMediaPlayer.prepare();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
         mMediaPlayer.setOnPreparedListener(this);
         mMediaPlayer.setOnCompletionListener(this);
         mMediaPlayer.setOnErrorListener(this);

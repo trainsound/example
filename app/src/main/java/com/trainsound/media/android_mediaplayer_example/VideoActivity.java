@@ -1,7 +1,6 @@
 package com.trainsound.media.android_mediaplayer_example;
 
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -39,7 +38,18 @@ public class VideoActivity extends AppCompatActivity implements SurfaceHolder.Ca
         // of relevance for us: OnPrepared, OnCompletion and OnError.
         // (We'll release and nullify the MediaPlayer in the activity's onStop() method ).
 
-        mMediaPlayer = MediaPlayer.create(this, R.raw.park_boo_video);
+        if(Configs.default_videoplay_mode.equals("localfileplay")){
+            mMediaPlayer = MediaPlayer.create(this, R.raw.park_boo_video);
+        }else if(Configs.default_videoplay_mode.equals("network")){
+            mMediaPlayer = new MediaPlayer();
+            try {
+                mMediaPlayer.setDataSource(Configs.video_url);
+                mMediaPlayer.prepare();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
         mMediaPlayer.setOnPreparedListener(this);
         mMediaPlayer.setOnCompletionListener(this);
         mMediaPlayer.setOnErrorListener(this);
@@ -115,5 +125,6 @@ public class VideoActivity extends AppCompatActivity implements SurfaceHolder.Ca
 
     @Override
     public void onPrepared(MediaPlayer mp) {
+        Toast.makeText(this, "It have been prepared", Toast.LENGTH_SHORT).show();
     }
 } // close class AudioActivity
