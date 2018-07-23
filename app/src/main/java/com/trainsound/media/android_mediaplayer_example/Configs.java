@@ -16,6 +16,7 @@ public class Configs {
      * audio config
      */
     //localfileplay, network
+    //mms://115.68.15.116/efm
     static final String default_audioplay_mode = "localfileplay"; //file play
     static final String audio_url = "http://www.all-birds.com/Sound/western%20bluebird.wav";
     static final int audio_local_file = R.raw.park_boo;
